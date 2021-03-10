@@ -1,6 +1,6 @@
 """Blogly application."""
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 
@@ -19,4 +19,55 @@ db.create_all()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return redirect('/users')
+
+@app.route('/users')
+def users():
+    users = User.query.all()
+    return render_template('index.html', users = users)
+
+@app.route('/users/new')
+def users_new():
+    return render_template('create_user.html')
+
+@app.route('/users/new', methods=['POST'])
+def add_new_user():
+    first = request.form["first"]
+    last = request.form["last"]
+    image = request.form["image"]
+
+    new_user = User(first_name=first, last_name=last, image_url=image)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return redirect('/users')
+
+@app.route('/users/<int:id>')
+def user_profile(id):
+    user = User.query.get(id)
+
+    return render_template('existing_user.html', user=user)
+
+@app.route('/users/<int:id>/edit')
+def edit_user(id):
+
+    user = User.query.get(id)
+    return render_template('/edit_form.html', user=user)
+
+@app.route('/users/<int:id>/edit', methods=['POST'])
+def save_edit_user(id):
+
+    first = request.form["first"]
+    last = request.form["last"]
+    image = request.form["image"]
+
+    user = User.query.get(id)
+
+    user.first_name = first
+    user.last_name = last
+    user.image_url = image
+
+    db.session.commit()
+
+    return redirect('/users')
