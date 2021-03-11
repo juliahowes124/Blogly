@@ -13,7 +13,13 @@ Edit a user
     <p>Last Name</p> 
     <input type="text" name="last" value="{{user.last_name}}">
     <p>Image URL</p> 
+    {% if user.image_url == "https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png" %}
+    <input type="text" name="image" value="">
+    {% endif %}
+
+    {% if not user.image_url == "https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png" %}
     <input type="text" name="image" value="{{user.image_url}}">
+    {% endif %}
     
     <button class="btn btn-success">Save</button>
 </form>

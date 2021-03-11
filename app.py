@@ -35,8 +35,11 @@ def add_new_user():
     first = request.form["first"]
     last = request.form["last"]
     image = request.form["image"]
-
-    new_user = User(first_name=first, last_name=last, image_url=image)
+    if image:
+        new_user = User(first_name=first, last_name=last, image_url=image)
+    else:
+        new_user = User(first_name=first, last_name=last)
+    
 
     db.session.add(new_user)
     db.session.commit()
@@ -57,17 +60,20 @@ def edit_user(id):
 
 @app.route('/users/<int:id>/edit', methods=['POST'])
 def save_edit_user(id):
-
-    first = request.form["first"]
-    last = request.form["last"]
-    image = request.form["image"]
-
     user = User.query.get(id)
 
-    user.first_name = first
-    user.last_name = last
-    user.image_url = image
-
+    user.first_name = request.form["first"]
+    user.last_name = request.form["last"]
+    if request.form["image"]:
+        user.image_url = request.form["image"]
+    
     db.session.commit()
 
+    return redirect('/users')
+
+@app.route('/users/<int:id>/delete', methods=["POST"])
+def delete_user(id):
+    user = User.query.get(id)
+    db.session.delete(user)
+    db.session.commit()
     return redirect('/users')

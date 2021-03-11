@@ -23,5 +23,9 @@ class User(db.Model):
 
     last_name = db.Column(db.String(50), nullable=False)
 
-    image_url = db.Column(db.String())
+    image_url = db.Column(db.String(), default="https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png")
+
+    @classmethod
+    def find_user_id(cls, first, last):
+        return cls.query.filter(User.first_name == first, User.last_name == last).first().id
     
