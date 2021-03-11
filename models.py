@@ -31,8 +31,9 @@ class User(db.Model):
 
     @classmethod
     def find_user_id(cls, first, last):
-        return cls.query.filter(User.first_name == first, User.last_name == last).first().id
+        return cls.query.filter(User.first_name == first, User.last_name == last).first()
 
+  
 class Post(db.Model):
     """ Model for Post """
 
