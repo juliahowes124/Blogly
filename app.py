@@ -103,3 +103,24 @@ def submit_new_post(id):
     db.session.commit()
 
     return redirect(f"/users/{id}")
+
+@app.route('/posts/<int:id>')
+def show_post(id):
+    """ Page for post """
+    post = Post.query.get(id)
+    return render_template('post_details.html', post=post)
+
+@app.route('/posts/<int:id>/edit')
+def show_edit_post(id):
+    """ Page for showing edit post form """
+    post = Post.query.get(id)
+    return render_template('edit_post.html', post=post)
+
+@app.route('/posts/<int:id>/edit', methods=["POST"])
+def edit_post(id):
+    """ Page for editing post """
+    post = Post.query.get(id)
+    post.title=request.form["title"]
+    post.content=request.form["content"]
+    db.session.commit()
+    return redirect(f"/posts/{id}")
