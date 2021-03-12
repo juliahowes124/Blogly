@@ -5,9 +5,14 @@
 <form action="/posts/{{post.id}}/edit" method="POST">
 
 <!-- ask about quote thing -->
-<p>Title <input type="text" name="title" value={{post.title}}></p>
+<p>Title <input type="text" name="title" value="{{post.title}}"></p>
 <p>Content <textarea rows="4" name="content">{{post.content}}</textarea></p>
 
+{% for tag in tags %}
+  <p><input type="checkbox" name="{{tag.name}}"
+    {% if tag in post.tags %}checked{%endif%}> {{tag.name}}</p>
+{% endfor %}
+<br>
   <a class="btn btn-success" href="/posts/{{post.id}}">Cancel</a>
   <button type="submit" class="btn btn-primary">Edit</button>
 

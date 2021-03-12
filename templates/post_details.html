@@ -5,7 +5,12 @@
 <p>
 {{post.content}}
 </p>
-<em>by {{post.user.first_name}} {{post.user.last_name}}</em>
+<em>by {{post.user.first_name}} {{post.user.last_name}}</em> on {{post.created_at}}
+<strong>Tags:</strong> 
+{% for tag in post.tags %}
+<a href="/tags/{{tag.id}}"><span class="badge bg-primary">{{tag.name}}</span></a>
+{% endfor %}
+
 <a class="btn btn-outline-primary" href="/users/{{post.user.id}}">Cancel</a>
 <a class="btn btn-primary" href="/posts/{{post.id}}/edit">Edit</a>
 <form action="/posts/{{post.id}}/delete" method="POST">

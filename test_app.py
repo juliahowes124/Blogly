@@ -18,6 +18,7 @@ class BloglyTestCase(TestCase):
 
         self.client = app.test_client()
         app.config['TESTING'] = True
+
     
     def test_homepage(self):
 
@@ -41,6 +42,7 @@ class BloglyTestCase(TestCase):
             html = response.get_data(as_text=True)
             self.assertEqual(response.status_code, 200)
             self.assertIn('<form action="/users/new" method="POST">', html)
+            
 
     def test_create_user_post(self):
 
