@@ -24,8 +24,8 @@ def index():
 @app.route('/users')
 def users():
     """ Home page, lists all existing users """
-    users = User.query.all()
-    return render_template('index.html', users = users)
+    users = User.query.order_by(User.last_name, User.first_name)
+    return render_template('index.html', users=users)
 
 @app.route('/users/new')
 def users_new():

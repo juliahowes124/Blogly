@@ -29,6 +29,10 @@ class User(db.Model):
 
     posts = db.relationship('Post')
 
+    @property
+    def fullname(self):
+        return f"{self.first_name} {self.last_name}"
+
     @classmethod
     def find_user_id(cls, first, last):
         return cls.query.filter(User.first_name == first, User.last_name == last).first()
