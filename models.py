@@ -59,6 +59,10 @@ class Post(db.Model):
 
     tags = db.relationship('Tag', secondary='post_tags')
 
+    @property
+    def friendly_date(self):
+        return self.created_at.date()
+
 class Tag(db.Model):
     """ Model for Tag """
 

@@ -19,18 +19,23 @@ db.create_all()
 
 @app.route('/')
 def index():
-    return redirect('/users')
+    """ Homepage, lists 5 most recent posts """
+    posts = Post.query.order_by(Post.created_at.desc()).limit(5)
+    return render_template('homepage.html', posts=posts)
+
 
 @app.route('/users')
 def users():
-    """ Home page, lists all existing users """
+    """ Lists all existing users """
     users = User.query.order_by(User.last_name, User.first_name)
     return render_template('index.html', users=users)
+
 
 @app.route('/users/new')
 def users_new():
     """ Page to add new user"""
     return render_template('create_user.html')
+
 
 @app.route('/users/new', methods=['POST'])
 def add_new_user():
