@@ -5,6 +5,10 @@
 <form action="/tags/{{tag.id}}/edit" method="POST">
     <p>Name <input type="text" name="tag_name" value="{{tag.name}}"></p>
     <a href="/tags" class="btn btn-info">Cancel</a>
+    {% for post in posts %}
+    <p><input type="checkbox" name="{{post.title}}"
+        {% if tag in post.tags %}checked{%endif%}> {{post.title}}</p>
+    {% endfor %}
     <button class="btn btn-success">Edit</button>
 </form>
 

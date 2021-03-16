@@ -27,7 +27,7 @@ class User(db.Model):
 
     image_url = db.Column(db.String(), default="https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png")
 
-    posts = db.relationship('Post')
+    posts = db.relationship('Post',  cascade="all, delete")
 
     @property
     def fullname(self):
@@ -53,7 +53,7 @@ class Post(db.Model):
 
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User')
 

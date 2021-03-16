@@ -21,7 +21,7 @@ db.create_all()
 @app.errorhandler(404)
 def page_not_found(e):
     """ Render custom 404 error page """
-    
+
     return render_template('404.html')
 
 
@@ -182,7 +182,8 @@ def show_tag_details(id):
 def create_tag_form():
     """ Display form for creating new tag """
 
-    return render_template('create_tag.html')
+    posts = Post.query.all()
+    return render_template('create_tag.html', posts=posts)
 
 @app.route('/tags/new', methods=['POST'])
 def create_tag():
@@ -200,7 +201,8 @@ def edit_tag_form(id):
     """ Display Form for Editing Tag """
 
     tag = Tag.query.get_or_404(id)
-    return render_template('edit_tag.html', tag=tag)
+    posts = Post.query.all()
+    return render_template('edit_tag.html', tag=tag, posts=posts)
 
 @app.route('/tags/<int:id>/edit', methods=["POST"])
 def edit_tag(id):
