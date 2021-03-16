@@ -18,4 +18,10 @@
     <!-- a tag -->
 </form>
 
+{% for category, msg in get_flashed_messages(with_categories=true) %}
+<div class="alert alert-{{category}}" role="alert">
+    {{msg}}
+</div>
+{% endfor %}
+
 {% endblock %}

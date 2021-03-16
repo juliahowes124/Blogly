@@ -12,4 +12,8 @@
 <button>Delete</button>
 </form>
 
+{% for category, msg in get_flashed_messages(with_categories=true) %}
+<p class="{{category}}">{{msg}}</p>
+{% endfor %}
+
 {% endblock %}

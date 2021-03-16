@@ -9,4 +9,7 @@
 </ul>
 <a class="btn btn-primary" href="/tags/new">Add Tag</a>
 
+{% for category, msg in get_flashed_messages(with_categories=true) %}
+<p class="{{category}}">{{msg}}</p>
+{% endfor %}
 {% endblock %}

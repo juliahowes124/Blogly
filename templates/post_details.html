@@ -16,5 +16,9 @@
 <form action="/posts/{{post.id}}/delete" method="POST">
     <button class="btn btn-danger">Delete</button>
 </form>
+
+{% for category, msg in get_flashed_messages(with_categories=true) %}
+<p class="{{category}}">{{msg}}</p>
+{% endfor %}
 {% endblock %}
 
