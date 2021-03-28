@@ -6,7 +6,7 @@
     <p>Name <input type="text" name="tag_name"></p>
     <a href="/tags" class="btn btn-outline-primary">Cancel</a>
     {% for post in posts %}
-    <p><input type="checkbox" name="{{post.title}}"> {{post.name}}</p>
+    <p><input type="checkbox" name="{{post.title}}"> {{post.title}}</p>
     {% endfor %}
     <button class="btn btn-success">Add</button>
 </form>

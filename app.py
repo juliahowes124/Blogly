@@ -178,6 +178,7 @@ def show_tag_details(id):
     tag = Tag.query.get_or_404(id)
     return render_template('tag_details.html', tag=tag)
 
+
 @app.route('/tags/new')
 def create_tag_form():
     """ Display form for creating new tag """
@@ -185,12 +186,18 @@ def create_tag_form():
     posts = Post.query.all()
     return render_template('create_tag.html', posts=posts)
 
+
 @app.route('/tags/new', methods=['POST'])
 def create_tag():
-    """ Create a new tag """ 
+    """ Create a new tag """  
 
     name = request.form["tag_name"]
     new_tag = Tag(name=name)
+    posts = Post.query.all()
+    for post in posts:
+        if request.form.get(f"{post.title}"):
+            new_tag.posts.append(post)
+
     db.session.add(new_tag)
     db.session.commit()
     flash("New tag created!", 'success')
@@ -204,11 +211,17 @@ def edit_tag_form(id):
     posts = Post.query.all()
     return render_template('edit_tag.html', tag=tag, posts=posts)
 
+
 @app.route('/tags/<int:id>/edit', methods=["POST"])
 def edit_tag(id):
     """ Edit a tag """
     tag = Tag.query.get_or_404(id)
     tag.name = request.form["tag_name"]
+    tag.posts = []
+    posts = Post.query.all()
+    for post in posts:
+        if request.form.get(f"{post.title}"):
+            tag.posts.append(post)
     db.session.commit()
     flash('Tag edited', 'success')
     return redirect(f"/tags/{id}")
