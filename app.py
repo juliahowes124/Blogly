@@ -3,6 +3,7 @@
 from flask import Flask, render_template, redirect, request, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post, Tag, PostTag
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "this-is-secret"
@@ -48,19 +49,19 @@ def users_new():
 @app.route('/users/new', methods=['POST'])
 def add_new_user():
     """ Form post to add new user """
-    first = request.form["first"]
-    last = request.form["last"]
-    image = request.form["image"]
-    if image:
+    first = request.form["first"] or None
+    last = request.form["last"] or None
+    image = request.form["image"] or None
+    try:
         new_user = User(first_name=first, last_name=last, image_url=image)
-    else:
-        new_user = User(first_name=first, last_name=last)
-    
-    db.session.add(new_user)
-    db.session.commit()
-    flash("New user created!", 'success')
+        db.session.add(new_user)
+        db.session.commit()
+        flash("New user created!", 'success')
+        return redirect('/users')
+    except IntegrityError:
+        flash("Unable to create user", "danger")
+        return redirect('/users/new')
 
-    return redirect('/users')
 
 @app.route('/users/<int:id>')
 def user_profile(id):
@@ -78,25 +79,34 @@ def edit_user(id):
 @app.route('/users/<int:id>/edit', methods=['POST'])
 def save_edit_user(id):
     """ Form post to edit individual user page """
-    user = User.query.get_or_404(id)
-
-    user.first_name = request.form["first"]
-    user.last_name = request.form["last"]
-    if request.form["image"]:
-        user.image_url = request.form["image"]
+    first = request.form["first"] or None
+    last = request.form["last"] or None
+    image = request.form["image"] or None
+    try:
+        user = User.query.get_or_404(id)
+        user.first_name = first
+        user.last_name = last
+        user.image_url = image
     
-    db.session.commit()
-    flash("User successfully edited!", 'success')
-    return redirect('/users')
+        db.session.commit()
+        flash("User successfully edited!", 'success')
+        return redirect('/users')
+    except IntegrityError:
+        flash("Unable to edit user", "danger")
+        return redirect(f"/users/{id}/edit")
 
 @app.route('/users/<int:id>/delete', methods=["POST"])
 def delete_user(id):
     """ Form post to delete a user """
-    user = User.query.get_or_404(id)
-    db.session.delete(user)
-    db.session.commit()
-    flash("User deleted.", 'success')
-    return redirect('/users')
+    try:
+        user = User.query.get_or_404(id)
+        db.session.delete(user)
+        db.session.commit()
+        flash("User deleted.", 'success')
+        return redirect('/users')
+    except IntegrityError:
+        flash("Unable to delete user", "danger")
+        return redirect(f"/users/{id}")
 
 @app.route('/users/<int:id>/posts/new')
 def new_post_form(id):
@@ -109,19 +119,23 @@ def new_post_form(id):
 @app.route('/users/<int:id>/posts/new', methods=['POST'])
 def submit_new_post(id):
     """ Form post for adding new post for individual user """
-    title = request.form["title"]
-    content = request.form["content"]
-    new_post = Post(title=title, content=content, author_id=id)
+    title = request.form["title"] or None
+    content = request.form["content"] or None
+    try:
+        new_post = Post(title=title, content=content, author_id=id)
 
-    tags = Tag.query.all()
-    for tag in tags:
-        if request.form.get(f"{tag.name}"):
-            new_post.tags.append(tag)
+        tags = Tag.query.all()
+        for tag in tags:
+            if request.form.get(f"{tag.name}"):
+                new_post.tags.append(tag)
 
-    db.session.add(new_post)
-    db.session.commit()
-    flash("Post created!", 'success')
-    return redirect(f"/users/{id}")
+        db.session.add(new_post)
+        db.session.commit()
+        flash("Post created!", 'success')
+        return redirect(f"/users/{id}")
+    except IntegrityError:
+        flash("Unable to create post", "danger")
+        return redirect(f"/users/{id}/posts/new")
 
 @app.route('/posts/<int:id>')
 def show_post(id):
@@ -139,30 +153,40 @@ def show_edit_post(id):
 @app.route('/posts/<int:id>/edit', methods=["POST"])
 def edit_post(id):
     """ Page for editing post """
-    post = Post.query.get_or_404(id)
-    post.title = request.form["title"]
-    post.content = request.form["content"]
+    title = request.form["title"] or None
+    content = request.form["content"] or None
+    try:
+        post = Post.query.get_or_404(id)
+        post.title = title
+        post.content = content
 
-    post.tags.clear()
+        post.tags.clear()
 
-    tags = Tag.query.all()
-    for tag in tags:
-        if request.form.get(f"{tag.name}"):
-            post.tags.append(tag)    
+        tags = Tag.query.all()
+        for tag in tags:
+            if request.form.get(f"{tag.name}"):
+                post.tags.append(tag)
 
-    db.session.commit()
-    flash('Post successfully edited!', 'success')
-    return redirect(f"/posts/{id}")
+        db.session.commit()
+        flash('Post successfully edited!', 'success')
+        return redirect(f"/posts/{id}")
+    except IntegrityError:
+        flash("Unable to edit post", "danger")
+        return redirect(f"/posts/{id}/edit")
 
 @app.route('/posts/<int:id>/delete', methods=["POST"])
 def delete_post(id):
     """ Delete a post by id """
-    post = Post.query.get_or_404(id)
-    user_id = post.user.id
-    db.session.delete(post)
-    db.session.commit()
-    flash("Post successfully deleted", 'success')
-    return redirect(f"/users/{user_id}")
+    try:
+        post = Post.query.get_or_404(id)
+        user_id = post.user.id
+        db.session.delete(post)
+        db.session.commit()
+        flash("Post successfully deleted", 'success')
+        return redirect(f"/users/{user_id}")
+    except IntegrityError:
+        flash("Unable to delete post", "danger")
+        return redirect(f"/posts/{id}")
 
 @app.route('/tags')
 def show_tags():
@@ -191,17 +215,22 @@ def create_tag_form():
 def create_tag():
     """ Create a new tag """  
 
-    name = request.form["tag_name"]
-    new_tag = Tag(name=name)
-    posts = Post.query.all()
-    for post in posts:
-        if request.form.get(f"{post.title}"):
-            new_tag.posts.append(post)
+    name = request.form["tag_name"] or None
+    try:
+        new_tag = Tag(name=name)
+        posts = Post.query.all()
+        for post in posts:
+            if request.form.get(f"{post.title}"):
+                new_tag.posts.append(post)
 
-    db.session.add(new_tag)
-    db.session.commit()
-    flash("New tag created!", 'success')
-    return redirect('/tags')
+        db.session.add(new_tag)
+        db.session.commit()
+        flash("New tag created!", 'success')
+        return redirect('/tags')
+    except IntegrityError:
+        flash("Unable to create tag", "danger")
+        return redirect("/tags/new")
+
 
 @app.route('/tags/<int:id>/edit')
 def edit_tag_form(id):
@@ -215,24 +244,32 @@ def edit_tag_form(id):
 @app.route('/tags/<int:id>/edit', methods=["POST"])
 def edit_tag(id):
     """ Edit a tag """
-    tag = Tag.query.get_or_404(id)
-    tag.name = request.form["tag_name"]
-    tag.posts = []
-    posts = Post.query.all()
-    for post in posts:
-        if request.form.get(f"{post.title}"):
-            tag.posts.append(post)
-    db.session.commit()
-    flash('Tag edited', 'success')
-    return redirect(f"/tags/{id}")
+    name = request.form["tag_name"] or None
+    try:
+        tag = Tag.query.get_or_404(id)
+        tag.name = name
+        tag.posts = []
+        posts = Post.query.all()
+        for post in posts:
+            if request.form.get(f"{post.title}"):
+                tag.posts.append(post)
+        db.session.commit()
+        flash('Tag edited', 'success')
+        return redirect(f"/tags/{id}")
+    except IntegrityError:
+        flash("Unable to edit tag", "danger")
+        return redirect(f"/tags/{id}/edit")
 
 @app.route('/tags/<int:id>/delete', methods=['POST'])
 def delete_tag(id):
     """ Delete a tag """
 
-    tag = Tag.query.get_or_404(id)
-
-    db.session.delete(tag)
-    db.session.commit()
-    flash('Tag deleted', 'success')
-    return redirect('/tags')
+    try:
+        tag = Tag.query.get_or_404(id)
+        db.session.delete(tag)
+        db.session.commit()
+        flash('Tag deleted', 'success')
+        return redirect('/tags')
+    except IntegrityError:
+        flash("Unable to delete tag", "danger")
+        return redirect(f"/tags/{id}")

@@ -72,7 +72,7 @@ class Tag(db.Model):
                 primary_key=True,
                 autoincrement=True)
     
-    name = db.Column(db.String(50), unique=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
 
     posts = db.relationship('Post', secondary='post_tags')
 
