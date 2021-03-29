@@ -1,20 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}
-<h1>Users</h1>
-{% endblock %}
-
 {% block content %}
-<ul>
+{% block header %}
+<h3 class="mt-5">Users</h3>
+{% endblock %}
+<ul class="list-group list-group-flush">
 
 {% for user in users %}
-<li><a href="users/{{user.id}}">{{user.fullname}}</a></li>
+<li class="list-group-item"><a href="users/{{user.id}}">{{user.fullname}}</a></li>
 {% endfor %}
 
 </ul>
 
 <form action="/users/new">
-    <button class="btn btn-primary">Add User</button>
+    <button class="btn btn-primary float-right">Add User</button>
     <!-- a tag -->
 </form>
 
