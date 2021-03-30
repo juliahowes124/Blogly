@@ -5,14 +5,15 @@ Edit {{user.fullname}}
 {% endblock %}
 
 {% block content %}
+{% block header %}
+<h3 class="mt-5">Edit {{user.fullname}}'s Profile: </h3>
+{% endblock %}
 
 <form action="/users/{{user.id}}/edit" method="POST">
 
-    <p>First Name</p>
-    <input type="text" name="first" value="{{user.first_name}}">
-    <p>Last Name</p> 
-    <input type="text" name="last" value="{{user.last_name}}">
-    <p>Image URL</p> 
+    <div>First Name <input type="text" name="first" value="{{user.first_name}}"></div>
+    <div>Last Name <input type="text" name="last" value="{{user.last_name}}"></div> 
+    <div>Image URL
     {% if user.image_url == "https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png" %}
     <input type="text" name="image" value="">
     {% endif %}
@@ -20,12 +21,9 @@ Edit {{user.fullname}}
     {% if not user.image_url == "https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png" %}
     <input type="text" name="image" value="{{user.image_url}}">
     {% endif %}
+    </div> 
     
-    <button class="btn btn-success">Save</button>
+    <button class="btn btn-success float-right">Save</button>
+    <a href="/users/{{user.id}}" class="btn btn-outline-primary float-right">Cancel</a>
 </form>
-
-<form action="/users/{{user.id}}">
-    <button class="btn btn-outline-primary">Cancel</button>
-</form>
-
 {% endblock %}

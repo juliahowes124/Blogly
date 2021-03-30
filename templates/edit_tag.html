@@ -2,14 +2,20 @@
 
 {% block title %} Edit a Tag {% endblock %}
 {% block content %}
+{% block header %}
+<h3 class="mt-5">Edit Tag</h3>
+{% endblock %}
 <form action="/tags/{{tag.id}}/edit" method="POST">
-    <p>Name <input type="text" name="tag_name" value="{{tag.name}}"></p>
-    <a href="/tags" class="btn btn-info">Cancel</a>
+    <div><b>Tag Name:</b> <input type="text" name="tag_name" value="{{tag.name}}"></div>
+    <div class="mt-4">
+    <b>Posts:</b>
     {% for post in posts %}
-    <p><input type="checkbox" name="{{post.title}}"
-        {% if tag in post.tags %}checked{%endif%}> {{post.title}}</p>
+    <div><input type="checkbox" name="{{post.title}}"
+        {% if tag in post.tags %}checked{%endif%}> {{post.title}}</div>
     {% endfor %}
-    <button class="btn btn-success">Edit</button>
+    </div>
+    <button class="btn btn-success float-right">Edit</button>
+    <a href="/tags" class="btn btn-info float-right">Cancel</a>
 </form>
 
 {% endblock %}

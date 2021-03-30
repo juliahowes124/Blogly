@@ -9,7 +9,7 @@
     <blockquote>{{post.content}}</blockquote>
     <div>By <span><a href="/users/{{post.user.id}}">{{post.user.fullname}}</a></span> on {{post.friendly_date}}</div>
     {% for tag in post.tags %}
-        <a href="/tags/{{tag.id}}"><span class="badge badge-info">{{tag.name}}</span></a>
+        <a href="/tags/{{tag.id}}" style="color: white"><span class="badge badge-info">{{tag.name}}</span></a>
     {% endfor %}
     <hr>
 </div>

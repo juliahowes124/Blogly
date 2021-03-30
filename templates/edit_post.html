@@ -2,19 +2,23 @@
 
 {% block title %} Edit Post {% endblock %}
 {% block content %}
+{% block header %}
+<h3 class="mt-5">Edit Post:</h3>
+{% endblock %}
+
 <form action="/posts/{{post.id}}/edit" method="POST">
+<div><b>Title: </b><input type="text" name="title" value="{{post.title}}"></div>
+<div><b>Content: </b><textarea rows="3" name="content">{{post.content}}</textarea></div>
 
-<!-- ask about quote thing -->
-<p>Title <input type="text" name="title" value="{{post.title}}"></p>
-<p>Content <textarea rows="4" name="content">{{post.content}}</textarea></p>
-
+<b>Tags:</b>
 {% for tag in tags %}
-  <p><input type="checkbox" name="{{tag.name}}"
-    {% if tag in post.tags %}checked{%endif%}> {{tag.name}}</p>
+  <div><input type="checkbox" name="{{tag.name}}"
+    {% if tag in post.tags %}checked{%endif%}> {{tag.name}}</div>
 {% endfor %}
 <br>
-  <a class="btn btn-success" href="/posts/{{post.id}}">Cancel</a>
-  <button type="submit" class="btn btn-primary">Edit</button>
+  <a class="btn btn-success float-right" href="/posts/{{post.id}}">Cancel</a>
+  <button type="submit" class="btn btn-primary float-right">Edit</button>
 
 </form>
 {% endblock %}
+
