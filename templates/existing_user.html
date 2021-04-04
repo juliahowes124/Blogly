@@ -2,19 +2,24 @@
 
 {% block content %} 
 <div class="row mt-5">
-  <img src="{{user.image_url}}" alt="" />
-  <div>
-    <h3>{{user.fullname}}</h3>
-    <a class="btn btn-primary float-right" href="/users/{{user.id}}/edit">Edit User</a>
+  <div class="w-50">
+    <img src="{{user.image_url}}" alt="{{user.fullname}}" width="150px" height="150px" style="border-radius: 50%; object-fit: cover;" />
+  </div>
+  <div class="w-50">
+    <h3 class="text-right">{{user.fullname}}</h3>
     <form action="/users/{{user.id}}/delete" method="POST">
-      <button class="btn btn-danger float-right">Delete User</button>
+      <button class="btn btn-danger float-right m-1">Delete</button>
     </form>
+    <a class="btn btn-outline-primary float-right m-1" href="/users/{{user.id}}/edit">Edit</a>
   </div>
 </div>
 
 <div class="mt-5">
   <h2>Posts</h2>
   <ul class="list-group list-group-flush">
+    
+  {% if not user.posts %}<div>No posts yet</div>{% endif %}
+
   {% for post in user.posts %}
   <li class="list-group-item"><a href="/posts/{{post.id}}">{{post.title}}</a></li>
   {% endfor %}

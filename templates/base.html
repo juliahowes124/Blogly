@@ -37,7 +37,7 @@
             </div>
         </div>
         {% for category, msg in get_flashed_messages(with_categories=true) %}
-            <div class="alert alert-{{category}}" role="alert">
+            <div class="alert alert-{{category}} w-50 mx-auto my-4" role="alert">
                 {{msg}}
             </div>
         {% endfor %}

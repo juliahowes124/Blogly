@@ -129,7 +129,7 @@ def submit_new_post(id):
         db.session.commit()
         flash("Post created!", 'success')
         return redirect(f"/users/{id}")
-    except IntegrityError:
+    except:
         flash("Unable to create post", "danger")
         return redirect(f"/users/{id}/posts/new")
 
