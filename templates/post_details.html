@@ -5,7 +5,7 @@
 {% block header %}
 <h3 class="mt-5">{{post.title}}</h3>
 {% endblock %}
-<div><em>by {{post.user.fullname}} </em> on {{post.friendly_date}}</div>
+<div class="mb-3"><em>by {{post.user.fullname}} </em> on {{post.friendly_date}}</div>
 <div class="mb-3">
     {% for tag in post.tags %}
     <a href="/tags/{{tag.id}}" style="color: white"><span class="badge bg-info">{{tag.name}}</span></a>
