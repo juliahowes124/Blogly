@@ -2,13 +2,17 @@
 
 {% block title %} Create a Tag {% endblock %}
 {% block content %}
+{% block header %}
+<h3 class="mt-5">Add a Tag</h3>
+{% endblock %}
 <form action="/tags/new" method="POST">
-    <p>Name <input type="text" name="tag_name"></p>
-    <a href="/tags" class="btn btn-outline-primary">Cancel</a>
+    <div class="my-3">Name <input type="text" name="tag_name"></div>
+    <h6>Tag some posts:</h6>
     {% for post in posts %}
-    <p><input type="checkbox" name="{{post.title}}"> {{post.title}}</p>
+    <div><input type="checkbox" name="{{post.title}}"> {{post.title}}</div>
     {% endfor %}
-    <button class="btn btn-success">Add</button>
+    <button class="btn btn-success m-1 float-right">Add</button>
+    <a href="/tags" class="btn btn-outline-primary m-1 float-right">Cancel</a>
 </form>
 
 {% endblock %}

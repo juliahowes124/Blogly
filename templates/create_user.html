@@ -5,11 +5,11 @@ Create a user
 {% endblock %}
 
 {% block content %}
-<form action="/users/new" method="POST" class="w-50">
-    <div class="my-3">First Name <input type="text" name="first"></div>
-    <div class="my-3">Last Name <input type="text" name="last"></div> 
-    <div class="my-3">Image URL <input type="text" name="image"></div> 
-    <a class="btn btn-outline-secondary mr-2" href="/users">Cancel</a>
-    <button class="btn btn-primary">Add</button>
+<form action="/users/new" method="POST">
+    <div class="my-3">First Name <input type="text" name="first" class="w-100"></div>
+    <div class="my-3">Last Name <input type="text" name="last"  class="w-100"></div> 
+    <div class="my-3">Image URL <input type="text" name="image"  class="w-100"></div> 
+    <button class="btn btn-success m-1 float-right">Add</button>
+    <a class="btn btn-outline-primary m-1 float-right" href="/users">Cancel</a>
 </form>
 {% endblock %}

@@ -11,15 +11,15 @@ Edit {{user.fullname}}
 
 <form action="/users/{{user.id}}/edit" method="POST">
 
-    <div class="my-2">First Name <input type="text" name="first" value="{{user.first_name}}"></div>
-    <div class="my-2">Last Name <input type="text" name="last" value="{{user.last_name}}"></div> 
+    <div class="my-2">First Name <input type="text" name="first" value="{{user.first_name}}" class="w-100"></div>
+    <div class="my-2">Last Name <input type="text" name="last" value="{{user.last_name}}" class="w-100"></div> 
     <div class="my-2">Image URL
     {% if user.image_url == "https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png" %}
-    <input type="text" name="image" value="">
+    <input type="text" name="image" value="" class="w-100">
     {% endif %}
 
     {% if not user.image_url == "https://winaero.com/blog/wp-content/uploads/2015/05/windows-10-user-account-login-icon.png" %}
-    <input type="text" name="image" value="{{user.image_url}}">
+    <input type="text" name="image" value="{{user.image_url}}" class="w-100">
     {% endif %}
     </div> 
     

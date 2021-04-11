@@ -33,7 +33,7 @@ def index():
 def users():
     """ Lists all existing users """
     users = User.query.order_by(User.last_name, User.first_name)
-    return render_template('index.html', users=users)
+    return render_template('user_list.html', users=users)
 
 
 @app.route('/users/new')
@@ -66,11 +66,13 @@ def user_profile(id):
 
     return render_template('existing_user.html', user=user)
 
+
 @app.route('/users/<int:id>/edit')
 def edit_user(id):
     """ Edit individual user page """
     user = User.query.get_or_404(id)
     return render_template('/edit_form.html', user=user)
+
 
 @app.route('/users/<int:id>/edit', methods=['POST'])
 def save_edit_user(id):

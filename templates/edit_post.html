@@ -8,9 +8,9 @@
 
 <form action="/posts/{{post.id}}/edit" method="POST">
 <div class="my-2">Title</div>
-<input type="text" name="title" value="{{post.title}}">
+<input type="text" name="title" value="{{post.title}}" class="w-100">
 <div class="my-2">Content</div> 
-<textarea rows="3" name="content">{{post.content}}</textarea><br>
+<textarea rows="3" name="content" class="w-100">{{post.content}}</textarea><br>
 <b>Tags:</b>
 {% for tag in tags %}
   <div><input type="checkbox" name="{{tag.name}}"

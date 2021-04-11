@@ -9,16 +9,16 @@
 <h3 class="mt-5">Create A Post:</h3>
 {% endblock %}
 <form action="/users/{{user.id}}/posts/new" method="POST">
-    <div><b>Title: </b> <input type="text" name="title"></div>
-    <div><b>Content: </b><textarea rows="3" name="content"></textarea></div>
+    <div><b>Title: </b> <input type="text" name="title" class="w-100"></div>
+    <div><b>Content: </b><textarea rows="3" name="content" class="w-100"></textarea></div>
     <div class="mt-4">
     <b>Posts:</b>
     {% for tag in tags %}
     <div><input type="checkbox" name="{{tag.name}}"> {{tag.name}}</div>
     {% endfor %}
     </div>
-    <a class="btn btn-success float-right" href="/users/{{user.id}}">Cancel</a>
-    <button type="submit" class="btn btn-primary float-right">Add</button>
+    <button type="submit" class="btn btn-success float-right m-1">Add</button>
+    <a class="btn btn-outline-primary float-right m-1" href="/users/{{user.id}}">Cancel</a>
 </form>
 
 {% endblock %}
